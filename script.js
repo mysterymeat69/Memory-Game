@@ -1,5 +1,10 @@
 const gameContainer = document.getElementById("game");
 
+let card1 = null;
+let card2 = null;
+let cardsFlipped = 0;
+let noClicking = false;
+
 const COLORS = [
   "red",
   "blue",
@@ -58,11 +63,52 @@ function createDivsForColors(colorArray) {
 }
 
 // TODO: Implement this function!
+// onclick, check if two cards are clicked
+//     - flip the card = add bg color
+//     -2nd flip, 
+//          - check if card color matches
+//            - if they match, leave them.
+/**
+ * if they don't match
+ *    flip both of them
+ *    set timer that flips them inactive
+ */
+        //   - flip both cards to blank if not
+// check if game is over and alert
+
+let lastCard = null
+let isClickable = true
 function handleCardClick(event) {
   // you can use event.target to see which element was clicked
+  if (!isClickable){
+    return
+  }
   console.log("you just clicked", event.target);
-  event.target.style.backgroundColor = event.target.className
+  if(lastCard === null){
+    event.target.style.backgroundColor = event.target.className
+    lastCard = event.target
+  } else {
+    // if they've already chosen a card
+    const currentCard = event.target
+    event.target.style.backgroundColor = event.target.className
+    isClickable = false
+      if(lastCard.className === currentCard.className){
+        // we're done
+        lastCard = null
+        isClickable = true
+      }
+      else{
+// if they don't match
+        setTimeout(() => {
+            lastCard.style.backgroundColor = null
+            currentCard.style.backgroundColor = null
+            lastCard = null
+            isClickable = true
+          }, 1000)
+      }
+  }
 }
 
 // when the DOM loads
 createDivsForColors(shuffledColors);
+
